@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Form Guard — Demo Hub</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: system-ui, sans-serif; background: #f8fafc; color: #1e293b; padding: 40px 16px; }
+    .container { max-width: 480px; margin: 0 auto; }
+    h1 { font-size: 2rem; margin-bottom: 8px; }
+    .subtitle { color: #64748b; margin-bottom: 32px; font-size: 0.9375rem; }
+    .card { background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px 24px; margin-bottom: 12px; transition: border-color 0.15s; }
+    .card:hover { border-color: #2563eb; }
+    .card a { text-decoration: none; color: inherit; display: block; }
+    .card h3 { font-size: 1.0625rem; margin-bottom: 4px; color: #2563eb; }
+    .card p { color: #64748b; font-size: 0.875rem; }
+    .status { display: flex; gap: 16px; margin-top: 32px; font-size: 0.8125rem; color: #64748b; }
+    .status span { display: flex; align-items: center; gap: 4px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+    .dot.green { background: #16a34a; }
+    hr { border: none; border-top: 1px solid #e2e8f0; margin: 24px 0; }
+    .commands { background: #1e293b; color: #e2e8f0; padding: 16px 20px; border-radius: 8px; font-family: 'SF Mono', 'Fira Code', monospace; font-size: 0.8125rem; line-height: 1.6; }
+    .commands .cmd { color: #93c5fd; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>Form Guard</h1>
+  <p class="subtitle">Production-minded, educational form validation — framework-agnostic, TypeScript-first.</p>
+
+  <a href="/examples/signup.html">
+    <div class="card">
+      <h3>Signup form</h3>
+      <p>Email, password, confirmation, terms checkbox — stop-at-first-error mode</p>
+    </div>
+  </a>
+
+  <a href="/examples/async-username.html">
+    <div class="card">
+      <h3>Async username check</h3>
+      <p>Simulated API call with debounce + AbortController cancellation</p>
+    </div>
+  </a>
+
+  <a href="/examples/group-validation.html">
+    <div class="card">
+      <h3>Group validation</h3>
+      <p>Radio buttons and checkbox groups as a single validation unit</p>
+    </div>
+  </a>
+
+  <a href="/examples/custom-rules.html">
+    <div class="card">
+      <h3>Custom rules</h3>
+      <p>Promo code validation and company domain check</p>
+    </div>
+  </a>
+
+  <a href="/examples/localization.html">
+    <div class="card">
+      <h3>Localization</h3>
+      <p>Runtime locale switching: English, Español, Français</p>
+    </div>
+  </a>
+
+  <hr>
+
+  <div class="commands">
+    <div><span class="cmd">npm run dev</span>  &larr; you are here</div>
+    <div>&nbsp;</div>
+    <div><span class="cmd">npm test</span>     &rarr; 77 tests (vitest + jsdom)</div>
+    <div><span class="cmd">npm run build</span> &rarr; ESM + CJS + types</div>
+  </div>
+
+  <div class="status">
+    <span><span class="dot green"></span> Vite dev server running</span>
+    <span>v1.0.0</span>
+  </div>
+</div>
+</body>
+</html>

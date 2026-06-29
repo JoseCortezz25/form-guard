@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Form Guard — Signup Example</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: system-ui, sans-serif; background: #f5f5f5; display: flex; justify-content: center; padding: 40px 16px; }
+    .container { max-width: 420px; width: 100%; }
+    h1 { font-size: 1.5rem; margin-bottom: 24px; }
+    form { background: #fff; padding: 32px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,.1); }
+    .field { margin-bottom: 20px; }
+    label { display: block; font-weight: 600; margin-bottom: 6px; font-size: .875rem; }
+    input { width: 100%; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 1rem; }
+    input:focus { outline: 2px solid #2563eb; outline-offset: -1px; }
+    .form-guard-error { border-color: #dc2626 !important; }
+    .form-guard-success { border-color: #16a34a !important; }
+    .form-guard-message { color: #dc2626; font-size: .8125rem; margin-top: 4px; display: block; }
+    button { width: 100%; padding: 12px; background: #2563eb; color: #fff; border: none; border-radius: 6px; font-size: 1rem; font-weight: 600; cursor: pointer; }
+    button:hover { background: #1d4ed8; }
+    pre { background: #f1f5f9; padding: 16px; border-radius: 6px; overflow-x: auto; font-size: .8125rem; margin-top: 24px; max-height: 300px; }
+    .checkbox-field { display: flex; align-items: center; gap: 8px; }
+    .checkbox-field input { width: auto; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>Create your account</h1>
+
+  <form id="signup-form">
+    <div class="field">
+      <label for="name">Full name</label>
+      <input id="name" name="name" type="text" autocomplete="name" />
+      <div id="name-errors"></div>
+    </div>
+
+    <div class="field">
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" autocomplete="email" />
+      <div id="email-errors"></div>
+    </div>
+
+    <div class="field">
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" autocomplete="new-password" />
+      <div id="password-errors"></div>
+    </div>
+
+    <div class="field">
+      <label for="confirm">Confirm password</label>
+      <input id="confirm" name="confirm" type="password" autocomplete="new-password" />
+      <div id="confirm-errors"></div>
+    </div>
+
+    <div class="field">
+      <div class="checkbox-field">
+        <input id="terms" name="terms" type="checkbox" />
+        <label for="terms">I agree to the Terms of Service</label>
+      </div>
+      <div id="terms-errors"></div>
+    </div>
+
+    <button type="submit">Sign up</button>
+  </form>
+
+  <pre id="output">Submit the form to see validation results</pre>
+</div>
+
+<script type="module">
+  import { FormGuard, required, email, minLength, sameAs, strongPassword } from '../src/index.ts';
+
+  const guard = new FormGuard('#signup-form', {
+    focusOnError: true,
+  });
+
+  guard.addField('name', [required()], {
+    errorContainer: document.getElementById('name-errors'),
+  });
+
+  guard.addField('email', [required(), email()], {
+    errorContainer: document.getElementById('email-errors'),
+  });
+
+  guard.addField('password', [
+    required(),
+    minLength(8, 'Must be at least 8 characters'),
+    strongPassword(),
+  ], {
+    errorContainer: document.getElementById('password-errors'),
+  });
+
+  guard.addField('confirm', [
+    required(),
+    sameAs('password', 'Passwords do not match'),
+  ], {
+    errorContainer: document.getElementById('confirm-errors'),
+  });
+
+  guard.addField('terms', [
+    required('You must accept the Terms of Service'),
+  ], {
+    errorContainer: document.getElementById('terms-errors'),
+  });
+
+  guard.onSuccess(() => {
+    document.getElementById('output').textContent = 'Form is valid! Ready to submit.';
+  });
+
+  guard.onFail((errors) => {
+    document.getElementById('output').textContent = JSON.stringify(errors, null, 2);
+  });
+</script>
+</body>
+</html>

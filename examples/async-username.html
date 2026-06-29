@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Form Guard — Async Validation Example</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: system-ui, sans-serif; background: #f5f5f5; display: flex; justify-content: center; padding: 40px 16px; }
+    .container { max-width: 420px; width: 100%; }
+    h1 { font-size: 1.5rem; margin-bottom: 24px; }
+    form { background: #fff; padding: 32px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,.1); }
+    .field { margin-bottom: 20px; }
+    label { display: block; font-weight: 600; margin-bottom: 6px; font-size: .875rem; }
+    input { width: 100%; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 1rem; }
+    input:focus { outline: 2px solid #2563eb; outline-offset: -1px; }
+    .form-guard-error { border-color: #dc2626 !important; }
+    .form-guard-success { border-color: #16a34a !important; }
+    .form-guard-message { color: #dc2626; font-size: .8125rem; margin-top: 4px; display: block; }
+    button { width: 100%; padding: 12px; background: #2563eb; color: #fff; border: none; border-radius: 6px; font-size: 1rem; font-weight: 600; cursor: pointer; }
+    .pending { color: #6b7280; font-size: .8125rem; margin-top: 4px; }
+    pre { background: #f1f5f9; padding: 16px; border-radius: 6px; overflow-x: auto; font-size: .8125rem; margin-top: 24px; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>Check username availability</h1>
+  <p style="color:#6b7280;margin-bottom:24px">This example simulates an API call to check if a username is taken. Try "admin", "root", or "test".</p>
+
+  <form id="username-form">
+    <div class="field">
+      <label for="username">Username</label>
+      <input id="username" name="username" type="text" autocomplete="username" placeholder="e.g. johndoe" />
+      <div id="username-errors"></div>
+    </div>
+    <button type="submit">Check availability</button>
+  </form>
+
+  <pre id="output">Type a username and submit</pre>
+</div>
+
+<script type="module">
+  import { FormGuard, required, minLength, asyncRule } from '../src/index.ts';
+
+  const RESERVED = new Set(['admin', 'root', 'test', 'system']);
+
+  async function checkUsername(value) {
+    // Simulate network delay
+    await new Promise(r => setTimeout(r, 800));
+    if (typeof value !== 'string') return true;
+    if (RESERVED.has(value.toLowerCase())) {
+      return `Username "${value}" is reserved`;
+    }
+    return true;
+  }
+
+  const guard = new FormGuard('#username-form', { focusOnError: true });
+
+  guard.addField('username', [
+    required('Please enter a username'),
+    minLength(3, 'Username must be at least 3 characters'),
+    asyncRule(checkUsername, { name: 'username-available' }),
+  ], {
+    errorContainer: document.getElementById('username-errors'),
+  });
+
+  guard.onSuccess(() => {
+    document.getElementById('output').textContent = 'Username is available!';
+  });
+
+  guard.onFail((errors) => {
+    document.getElementById('output').textContent = JSON.stringify(errors, null, 2);
+  });
+</script>
+</body>
+</html>

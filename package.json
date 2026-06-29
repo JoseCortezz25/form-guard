@@ -1,0 +1,34 @@
+{
+  "name": "form-guard",
+  "version": "1.0.0",
+  "description": "Production-minded, educational form validation library — framework-agnostic, TypeScript-first",
+  "type": "module",
+  "main": "./dist/form-guard.cjs",
+  "module": "./dist/form-guard.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/form-guard.js",
+      "require": "./dist/form-guard.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "vite --open",
+    "build": "vite build && tsc --emitDeclarationOnly",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "jsdom": "^25.0.0",
+    "typescript": "^5.6.0",
+    "vite": "^6.0.0",
+    "vitest": "^3.0.0"
+  },
+  "license": "MIT"
+}

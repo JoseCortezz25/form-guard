@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Form Guard — Group Validation Example</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: system-ui, sans-serif; background: #f5f5f5; display: flex; justify-content: center; padding: 40px 16px; }
+    .container { max-width: 420px; width: 100%; }
+    h1 { font-size: 1.5rem; margin-bottom: 24px; }
+    form { background: #fff; padding: 32px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,.1); }
+    .field { margin-bottom: 20px; }
+    legend { font-weight: 600; margin-bottom: 8px; font-size: .875rem; }
+    .option { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+    .option input { width: auto; }
+    .form-guard-message { color: #dc2626; font-size: .8125rem; margin-top: 4px; display: block; }
+    button { width: 100%; padding: 12px; background: #2563eb; color: #fff; border: none; border-radius: 6px; font-size: 1rem; font-weight: 600; cursor: pointer; margin-top: 8px; }
+    pre { background: #f1f5f9; padding: 16px; border-radius: 6px; overflow-x: auto; font-size: .8125rem; margin-top: 24px; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>Preferences</h1>
+
+  <form id="prefs-form">
+    <fieldset class="field">
+      <legend>Choose your plan</legend>
+      <div class="option">
+        <input type="radio" name="plan" value="basic" id="plan-basic" />
+        <label for="plan-basic">Basic — Free</label>
+      </div>
+      <div class="option">
+        <input type="radio" name="plan" value="pro" id="plan-pro" />
+        <label for="plan-pro">Pro — $10/mo</label>
+      </div>
+      <div class="option">
+        <input type="radio" name="plan" value="enterprise" id="plan-enterprise" />
+        <label for="plan-enterprise">Enterprise — Custom</label>
+      </div>
+      <div id="plan-errors"></div>
+    </fieldset>
+
+    <fieldset class="field">
+      <legend>Interests (select at least one)</legend>
+      <div class="option">
+        <input type="checkbox" name="interests" value="web" id="int-web" />
+        <label for="int-web">Web Development</label>
+      </div>
+      <div class="option">
+        <input type="checkbox" name="interests" value="mobile" id="int-mobile" />
+        <label for="int-mobile">Mobile Development</label>
+      </div>
+      <div class="option">
+        <input type="checkbox" name="interests" value="ai" id="int-ai" />
+        <label for="int-ai">AI / Machine Learning</label>
+      </div>
+      <div id="interests-errors"></div>
+    </fieldset>
+
+    <button type="submit">Save preferences</button>
+  </form>
+
+  <pre id="output">Submit to validate</pre>
+</div>
+
+<script type="module">
+  import { FormGuard, required } from '../src/index.ts';
+
+  const guard = new FormGuard('#prefs-form', { focusOnError: true });
+
+  guard.addGroup('plan', [required('Please select a plan')], {
+    errorContainer: document.getElementById('plan-errors'),
+  });
+
+  guard.addGroup('interests', [required('Select at least one interest')], {
+    errorContainer: document.getElementById('interests-errors'),
+  });
+
+  guard.onSuccess(() => {
+    document.getElementById('output').textContent = 'Preferences saved!';
+  });
+
+  guard.onFail((errors) => {
+    document.getElementById('output').textContent = JSON.stringify(errors, null, 2);
+  });
+</script>
+</body>
+</html>

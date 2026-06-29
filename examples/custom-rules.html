@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Form Guard — Custom Rule Example</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: system-ui, sans-serif; background: #f5f5f5; display: flex; justify-content: center; padding: 40px 16px; }
+    .container { max-width: 420px; width: 100%; }
+    h1 { font-size: 1.5rem; margin-bottom: 24px; }
+    form { background: #fff; padding: 32px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,.1); }
+    .field { margin-bottom: 20px; }
+    label { display: block; font-weight: 600; margin-bottom: 6px; font-size: .875rem; }
+    input, textarea { width: 100%; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 1rem; font-family: inherit; }
+    .form-guard-error { border-color: #dc2626 !important; }
+    .form-guard-success { border-color: #16a34a !important; }
+    .form-guard-message { color: #dc2626; font-size: .8125rem; margin-top: 4px; display: block; }
+    button { width: 100%; padding: 12px; background: #2563eb; color: #fff; border: none; border-radius: 6px; font-size: 1rem; font-weight: 600; cursor: pointer; }
+    pre { background: #f1f5f9; padding: 16px; border-radius: 6px; overflow-x: auto; font-size: .8125rem; margin-top: 24px; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>Custom validation rules</h1>
+
+  <form id="custom-form">
+    <div class="field">
+      <label for="code">Promo code</label>
+      <input id="code" name="code" type="text" placeholder="e.g. SUMMER2024" />
+      <div id="code-errors"></div>
+    </div>
+
+    <div class="field">
+      <label for="domain">Email domain (must be company domain)</label>
+      <input id="domain" name="domain" type="text" placeholder="e.g. @acme.com" />
+      <div id="domain-errors"></div>
+    </div>
+
+    <button type="submit">Apply</button>
+  </form>
+
+  <pre id="output">Submit to validate</pre>
+</div>
+
+<script type="module">
+  import { FormGuard, required, custom } from '../src/index.ts';
+
+  const VALID_CODES = new Set(['SUMMER2024', 'WELCOME10', 'VIP2024']);
+
+  const guard = new FormGuard('#custom-form', { focusOnError: true });
+
+  guard.addField('code', [
+    required(),
+    custom((value) => {
+      if (typeof value !== 'string') return 'Invalid code';
+      if (!VALID_CODES.has(value.toUpperCase())) {
+        return `"${value}" is not a valid promo code`;
+      }
+      return true;
+    }, 'promo-code'),
+  ], {
+    errorContainer: document.getElementById('code-errors'),
+  });
+
+  guard.addField('domain', [
+    required(),
+    custom((value) => {
+      if (typeof value !== 'string') return 'Invalid domain';
+      if (!value.endsWith('@acme.com')) {
+        return 'Must be an @acme.com email address';
+      }
+      return true;
+    }, 'company-domain'),
+  ], {
+    errorContainer: document.getElementById('domain-errors'),
+  });
+
+  guard.onSuccess(() => {
+    document.getElementById('output').textContent = 'All checks passed!';
+  });
+
+  guard.onFail((errors) => {
+    document.getElementById('output').textContent = JSON.stringify(errors, null, 2);
+  });
+</script>
+</body>
+</html>

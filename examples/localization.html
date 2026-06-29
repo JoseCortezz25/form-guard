@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Form Guard — Localization Example</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: system-ui, sans-serif; background: #f5f5f5; display: flex; justify-content: center; padding: 40px 16px; }
+    .container { max-width: 420px; width: 100%; }
+    h1 { font-size: 1.5rem; margin-bottom: 24px; }
+    form { background: #fff; padding: 32px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,.1); }
+    .field { margin-bottom: 20px; }
+    label { display: block; font-weight: 600; margin-bottom: 6px; font-size: .875rem; }
+    input { width: 100%; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 1rem; }
+    .form-guard-error { border-color: #dc2626 !important; }
+    .form-guard-success { border-color: #16a34a !important; }
+    .form-guard-message { color: #dc2626; font-size: .8125rem; margin-top: 4px; display: block; }
+    select { width: 100%; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 1rem; margin-bottom: 20px; }
+    button { width: 100%; padding: 12px; background: #2563eb; color: #fff; border: none; border-radius: 6px; font-size: 1rem; font-weight: 600; cursor: pointer; }
+    pre { background: #f1f5f9; padding: 16px; border-radius: 6px; overflow-x: auto; font-size: .8125rem; margin-top: 24px; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>Multi-language validation</h1>
+
+  <label for="locale">Language</label>
+  <select id="locale">
+    <option value="en">English</option>
+    <option value="es">Español</option>
+    <option value="fr">Français</option>
+  </select>
+
+  <form id="contact-form">
+    <div class="field">
+      <label for="name">Name</label>
+      <input id="name" name="name" type="text" />
+      <div id="name-errors"></div>
+    </div>
+
+    <div class="field">
+      <label for="email2">Email</label>
+      <input id="email2" name="email2" type="email" />
+      <div id="email2-errors"></div>
+    </div>
+
+    <button type="submit">Send</button>
+  </form>
+
+  <pre id="output">Submit to validate</pre>
+</div>
+
+<script type="module">
+  import { FormGuard, required, email } from '../src/index.ts';
+
+  const locales = {
+    es: {
+      required: 'Este campo es obligatorio',
+      email: 'Ingrese un correo electrónico válido',
+    },
+    fr: {
+      required: 'Ce champ est obligatoire',
+      email: 'Veuillez entrer un email valide',
+    },
+  };
+
+  const guard = new FormGuard('#contact-form', { focusOnError: true });
+
+  guard.addField('name', [required()], {
+    errorContainer: document.getElementById('name-errors'),
+  });
+
+  guard.addField('email2', [required(), email()], {
+    errorContainer: document.getElementById('email2-errors'),
+  });
+
+  document.getElementById('locale').addEventListener('change', (e) => {
+    const lang = e.target.value;
+    if (lang === 'en') {
+      guard.setLocale({
+        required: 'This field is required',
+        email: 'Please enter a valid email address',
+      });
+    } else {
+      guard.setLocale(locales[lang]);
+    }
+    guard.clearErrors();
+  });
+
+  guard.onSuccess(() => {
+    document.getElementById('output').textContent = 'Form is valid!';
+  });
+
+  guard.onFail((errors) => {
+    document.getElementById('output').textContent = JSON.stringify(errors, null, 2);
+  });
+</script>
+</body>
+</html>
