@@ -2,7 +2,7 @@
 
 ## 1. Overview
 
-Form Guard is an educational but production-minded form validation library inspired by JustValidate. It keeps the familiar instance-based API, while improving readability, extensibility, and developer experience.
+Form Guard is a production-minded form validation library. It provides a clean instance-based API with composable rules, async support, and accessible DOM output.
 
 The goal is not to create a framework-specific solution. Form Guard should work with plain HTML forms and vanilla TypeScript/JavaScript, while remaining easy to adapt for other environments.
 
@@ -13,12 +13,12 @@ Existing form validation libraries often fall into one of two extremes:
 - They are too low-level and require repetitive setup.
 - They are too framework-specific or too abstract for simple HTML forms.
 
-JustValidate solves part of this problem, but Form Guard should improve the learning experience and modernize the API without losing the simplicity of the original mental model.
+Form Guard should modernize form validation without sacrificing simplicity.
 
 ## 3. Product Goals
 
 1. Provide a simple instance-based API for validating forms.
-2. Make the API educational and easy to read for developers learning validation concepts.
+2. Make the API clean and easy to read.
 3. Support multiple rules per field through a clean, composable syntax.
 4. Support custom validation, async validation, groups, localization, and runtime feedback.
 5. Ship with strong examples, a technical README, and a test suite that documents behavior.
@@ -27,15 +27,14 @@ JustValidate solves part of this problem, but Form Guard should improve the lear
 ## 4. Target Users
 
 - Developers building plain HTML forms.
-- Developers learning validation patterns in TypeScript.
 - Teams that want a lightweight validation library without framework lock-in.
-- Developers who like the JustValidate mental model but want a cleaner, more educational version.
+- Developers who want an instance-based mental model.
 
 ## 5. Product Principles
 
 - Keep the API familiar and instance-based.
 - Prefer readable names over clever abstractions.
-- Optimize for teaching external behavior, not implementation details.
+- Optimize for external behavior, not implementation details.
 - Avoid framework lock-in.
 - Make validation rules composable and discoverable.
 - Make async validation first-class, not an afterthought.
@@ -71,7 +70,7 @@ JustValidate solves part of this problem, but Form Guard should improve the lear
 const guard = new FormGuard('#signup-form');
 ```
 
-Optional global config should remain instance-based and close to the mental model of JustValidate.
+Optional global config should remain instance-based.
 
 ### Core Methods
 
@@ -114,7 +113,7 @@ guard.addField('#password', [
 
 ## 8. Rule Requirements
 
-The initial rule set should cover the common cases from JustValidate plus improved naming clarity.
+The initial rule set should cover the common validation cases.
 
 ### Required rules
 
@@ -154,7 +153,7 @@ Form Guard should allow a small, understandable global config for:
 - automatic form locking/unlocking during validation if needed
 - error and success styling hooks
 - debug mode
-- learning mode / verbose developer feedback
+- verbose developer feedback
 
 ### Field config goals
 
@@ -187,14 +186,14 @@ The library should still support simple message rendering, but internal and call
 
 ## 11. Developer Experience Requirements
 
-Form Guard should feel better to use than a direct copy of JustValidate by adding:
+Form Guard should feel polished by adding:
 
 - clearer rule names
 - clearer method names where it improves readability
 - consistent return types for chaining
 - helpful warnings in development
 - readable error output
-- examples that teach by showing real scenarios
+- examples that show real scenarios
 - a README that explains not only the API, but also the design choices
 
 ## 12. Accessibility Requirements
@@ -230,7 +229,7 @@ The repository must include a technical README that covers:
 
 - technical
 - precise
-- educational
+- technical
 - no marketing fluff
 - no vague promises
 

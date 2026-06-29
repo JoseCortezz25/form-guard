@@ -1,8 +1,8 @@
 # Form Guard
 
-A production-minded, educational form validation library for plain HTML forms. Framework-agnostic, TypeScript-first.
+A production-minded form validation library for plain HTML forms. Framework-agnostic, TypeScript-first.
 
-Inspired by the JustValidate mental model — instance-based API, composable rules, clean error handling — with improved naming, structured errors, first-class async support, and accessible DOM output.
+Instance-based API, composable rules, clean error handling — with structured errors, first-class async support, debounce + cancellation, and accessible DOM output.
 
 ## Why Form Guard
 
