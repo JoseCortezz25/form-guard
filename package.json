@@ -1,6 +1,6 @@
 {
-  "name": "@josentdev/form-guard",
-  "version": "1.0.1",
+  "name": "@ajosecortes/form-guard",
+  "version": "1.0.2",
   "description": "Production-minded form validation library — framework-agnostic, TypeScript-first",
   "type": "module",
   "main": "./dist/form-guard.cjs",
